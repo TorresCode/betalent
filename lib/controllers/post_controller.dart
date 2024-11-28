@@ -9,10 +9,8 @@ class PostController {
 
   void onChanged(String value) {
     if (value.isEmpty) {
-      // Se o valor do campo estiver vazio, restaura a lista original
       posts.value = _originalPosts;
     } else {
-      // Filtra os posts por ID ou título
       posts.value = _originalPosts.where((post) {
         final searchQuery = value.toLowerCase();
         return post.job.toLowerCase().contains(searchQuery) || 

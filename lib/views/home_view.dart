@@ -23,7 +23,7 @@ class _HomeViewState extends State<HomeView> {
 
   String formatDate(String date) {
     DateTime dateTime = DateTime.parse(date);
-    return DateFormat('dd/MM/yyyy').format(dateTime); // Exemplo de formatação: "02/12/2019"
+    return DateFormat('dd/MM/yyyy').format(dateTime); 
   }
 
   @override
@@ -78,63 +78,60 @@ class _HomeViewState extends State<HomeView> {
                 valueListenable: _controller.posts,
                 builder: (_, value, __) {
                   if (value.isEmpty) {
-                    // Exibe o loader enquanto os dados não foram carregados
                     return const Center(
                       child: CircularProgressIndicator(),
                     );
                   }
 
-                  // Exibe a tabela de dados
                   return Center(
-  child: SingleChildScrollView(
-    scrollDirection: Axis.horizontal,
-    child: Container(
-      //width: MediaQuery.of(context).size.width * 0.9,
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: const Color.fromARGB(255, 212, 212, 212),
-          width: 1,
-        ),
-        borderRadius: BorderRadius.circular(4),
-      ),
-      child: DataTable(
-        columns: const [
-          DataColumn(label: Text('Foto')),
-          DataColumn(label: Text('Nome')),
-          DataColumn(label: Text('Cargo')),
-          DataColumn(label: Text('Data de admissão')),
-          DataColumn(label: Text('Telefone')),
-        ],
-        rows: value
-            .map(
-              (post) => DataRow(
-                cells: [
-                  // Adicionando o Avatar (Imagem)
-                  DataCell(
-                    CircleAvatar(
-                      backgroundImage: NetworkImage(post.image), // Usando NetworkImage para URL
-                      radius: 20, // Tamanho do avatar
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Container(
+                        //width: MediaQuery.of(context).size.width * 0.9,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: const Color.fromARGB(255, 212, 212, 212),
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: DataTable(
+                          columns: const [
+                            DataColumn(label: Text('Foto')),
+                            DataColumn(label: Text('Nome')),
+                            DataColumn(label: Text('Cargo')),
+                            DataColumn(label: Text('Data de admissão')),
+                            DataColumn(label: Text('Telefone')),
+                          ],
+                          rows: value
+                              .map(
+                                (post) => DataRow(
+                                  cells: [
+                                    DataCell(
+                                      CircleAvatar(
+                                        backgroundImage: NetworkImage(post.image), 
+                                        radius: 20,
+                                      ),
+                                    ),
+                                    DataCell(Text(post.name)),
+                                    DataCell(Text(post.job)),
+                                    DataCell(Text(formatDate(post.admission_date))),
+                                    DataCell(Text(phoneFormatter.maskText(post.phone))),
+                                  ],
+                                ),
+                              )
+                              .toList(),
+                          headingRowColor: WidgetStateProperty.resolveWith<Color>(
+                            (states) => const Color(0xFFedeffb),
+                          ),
+                          dataRowColor: WidgetStateProperty.resolveWith<Color>(
+                            (states) => Colors.white,
+                          ),
+                          border: null,
+                        ),
+                      ),
                     ),
-                  ),
-                  DataCell(Text(post.name)),
-                  DataCell(Text(post.job)),
-                  DataCell(Text(formatDate(post.admission_date))),
-                  DataCell(Text(phoneFormatter.maskText(post.phone))),
-                ],
-              ),
-            )
-            .toList(),
-        headingRowColor: WidgetStateProperty.resolveWith<Color>(
-          (states) => const Color(0xFFedeffb),
-        ),
-        dataRowColor: WidgetStateProperty.resolveWith<Color>(
-          (states) => Colors.white,
-        ),
-        border: null,
-      ),
-    ),
-  ),
-);
+                  );
 
                 },
               ),
